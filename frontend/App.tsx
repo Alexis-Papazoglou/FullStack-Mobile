@@ -1,7 +1,7 @@
 import { SafeAreaView, Text } from "react-native";
-import AuthScreen from "./AuthScreen";
+import AuthScreen from "./Components/AuthScreen";
 import { AuthProvider, useAuth } from "./Context/AuthContext";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./Components/HomeScreen";
 
 function MainApp() {
   const { user, isLogged, loading } = useAuth();

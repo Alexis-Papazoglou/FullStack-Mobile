@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "./Context/AuthContext";
+import { useAuth } from "../Context/AuthContext";
 
 export default function AuthScreen() {
   const { logIn, createAccount, lastError } = useAuth();

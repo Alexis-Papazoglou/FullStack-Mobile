@@ -1,25 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
+import { Socket } from "socket.io-client";
+import { User, Token } from "../interfaces";
 
 interface AuthProps {
   isLogged: boolean;
   loading: boolean;
   logIn(username: string, password: string): Promise<any>;
   createAccount(username: string, password: string): Promise<any>;
-  logOut(): Promise<any>;
+  logOut(socketRef: Socket | undefined): Promise<any>;
   lastError: Error | undefined;
   user: User | undefined;
-}
-
-export interface User {
-  username: string;
-  token: Token;
-}
-
-export interface Token {
-  value: string;
-  expiration: string;
 }
 
 const SERVER = "http://192.168.1.19:3000";
@@ -31,7 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | undefined>();
   const [lastError, setLastError] = useState<Error | undefined>();
 
-  //TODO : Handle Case token expired
+  // Handle Case token expired
   useEffect(() => {
     async function getToken() {
       setLoading(true);
@@ -146,7 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  async function logOut() {
+  async function logOut(socketRef: Socket | undefined = undefined) {
     try {
       //delete token from storage
       await SecureStore.deleteItemAsync("token");
@@ -155,6 +147,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       //update logging state
       setUser(undefined);
       setIsLogged(false);
+      if (socketRef) {
+        socketRef.disconnect();
+      }
     } catch (error) {
       setLastError(error as Error);
       throw error as Error;

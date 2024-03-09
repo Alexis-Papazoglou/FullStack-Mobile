@@ -2,7 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const TOKEN_EXPIRATION_SECONDS = 360; // 1 minute
+const TOKEN_EXPIRATION_SECONDS = 360;
 
 const register = async (req, res, next) => {
   if (req.body.username !== undefined && req.body.password !== undefined) {
@@ -12,15 +12,24 @@ const register = async (req, res, next) => {
     }
     bcrypt.hash(password, 10).then(async (hash) => {
       try {
-        await User.create({
+        const user = await User.create({
           username,
           password: hash,
-        }).then((user) =>
-          res.status(200).json({
-            message: "User successfully created",
-            user,
-          })
-        );
+        });
+
+        // Generate JWT token
+        const tokenValue = jwt.sign({ userId: user._id }, "a", {
+          expiresIn: TOKEN_EXPIRATION_SECONDS + "s",
+        });
+
+        res.status(200).json({
+          message: "User successfully created",
+          user,
+          token: {
+            value: tokenValue,
+            expiration: TOKEN_EXPIRATION_SECONDS,
+          },
+        });
       } catch (err) {
         console.log(err);
         res.status(401).json({
