@@ -25,6 +25,12 @@ app.use(
   require("./Posts/postsRoutes")
 );
 
+app.use(
+  "/users",
+  require("./tokenVerification/tokenVerificationMiddleware"),
+  require("./Follows/userRoutes")
+);
+
 //Authentication routes
 app.use("/auth", require("./Authentication/AuthRoute"));
 

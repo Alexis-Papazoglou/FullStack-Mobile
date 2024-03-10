@@ -1,6 +1,7 @@
 export interface User {
   username: string;
   token: Token;
+  following: string[];
 }
 
 export interface Token {

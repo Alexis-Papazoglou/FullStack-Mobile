@@ -9,14 +9,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { useCheckToken } from "../Hooks/useCheckToken";
 import io, { Socket } from "socket.io-client";
-import { Post } from "../interfaces";
+import { Post, User } from "../interfaces";
 import { CreatePost } from "./CreatePost";
-import PostsView from "./PostsView";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import PostsViewForYou from "./PostsViewForYou";
+import PostsViewFollowing from "./PostsViewFollowing";
 
 export default function HomeScreen() {
   const [isPostModalVisible, setPostModalVisible] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState<number>(0);
   const { user, logOut } = useAuth();
   const isTokenOk = useCheckToken();
   const socketRef = useRef<Socket | undefined>(undefined);
@@ -28,8 +30,9 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
+    getFollowingPosts();
     getPosts();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     async function connectSocket() {
@@ -107,14 +110,57 @@ export default function HomeScreen() {
         Authorization: `Bearer ${user.token.value}`,
       },
     });
+    if (!res.ok) {
+      throw new Error("HTTP error " + res.status);
+    }
     const data = await res.json();
     setPosts(data.posts);
+  }
+
+  async function getFollowingPosts() {
+    if (!user) throw new Error("User is not defined");
+
+    //CHECK IF TOKEN IS STILL VALID
+    const tokenOk = await isTokenOk();
+    if (!tokenOk) return;
+
+    const res = await fetch(
+      `http://192.168.1.19:3000/posts/getFollowingPosts/${user.username}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token.value}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      throw new Error("HTTP error " + res.status);
+    }
+    const data = await res.json();
+    setFollowingPosts(data.posts);
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Text>Welcome: {user.username}</Text>
-      <PostsView posts={posts} />
+      <View style={styles.pageSelectorContainer}>
+        <TouchableOpacity onPress={() => setPage(0)}>
+          <Text style={[styles.selectorText, page === 0 ? { color: "red" } : {}]}>
+            For you
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setPage(1)}>
+          <Text style={[styles.selectorText, page === 1 ? { color: "red" } : {}]}>
+            Following
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {page === 0 ? (
+        <PostsViewForYou posts={posts} />
+      ) : (
+        <PostsViewFollowing posts={followingPosts} />
+      )}
 
       <TouchableOpacity
         style={styles.postButton}
@@ -146,5 +192,14 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
     padding: 10,
     margin: 10,
+  },
+  pageSelectorContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    padding: 10,
+  },
+  selectorText: {
+    fontSize: 20,
   },
 });

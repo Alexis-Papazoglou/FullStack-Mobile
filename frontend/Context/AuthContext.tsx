@@ -12,6 +12,7 @@ interface AuthProps {
   logOut(socketRef: Socket | undefined): Promise<any>;
   lastError: Error | undefined;
   user: User | undefined;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
 const SERVER = "http://192.168.1.19:3000";
@@ -30,8 +31,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       let tok = await SecureStore.getItemAsync("token");
       let exp = await SecureStore.getItemAsync("expiration");
       let usr = await SecureStore.getItemAsync("user");
+      let following = await SecureStore.getItemAsync("following");
 
-      if (tok && usr && exp) {
+      if (tok && usr && exp && following) {
         //TOKEN EXPIRED
         if (exp < String(Date.now())) {
           Alert.alert("Your session has expired");
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             value: tok,
             expiration: exp,
           },
+          following: JSON.parse(following),
         });
         setIsLogged(true);
       }
@@ -78,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({
           username: data.user.username,
           token: data.token,
+          following: data.user.following,
         });
 
         //store data to secure store
@@ -87,9 +91,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           String(Date.now() + data.token.expiration * 1000)
         );
         await SecureStore.setItemAsync("user", data.user.username);
+        await SecureStore.setItemAsync(
+          "following",
+          JSON.stringify(data.user.following)
+        );
 
         setIsLogged(true);
-        //if response is not 200
       } else {
         throw new Error(data.error);
       }
@@ -117,6 +124,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({
           username: data.user.username,
           token: data.token,
+          following: data.user.following,
         });
 
         //store data to secure store
@@ -126,9 +134,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           String(Date.now() + data.token.expiration * 1000)
         );
         await SecureStore.setItemAsync("user", data.user.username);
+        await SecureStore.setItemAsync(
+          "following",
+          JSON.stringify(data.user.following)
+        );
 
         setIsLogged(true);
-        //if response is not 200
       } else {
         throw new Error(data.error);
       }
@@ -144,6 +155,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await SecureStore.deleteItemAsync("token");
       await SecureStore.deleteItemAsync("user");
       await SecureStore.deleteItemAsync("expiration");
+      await SecureStore.deleteItemAsync("following");
       //update logging state
       setUser(undefined);
       setIsLogged(false);
@@ -158,7 +170,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, isLogged, logIn, createAccount, logOut, lastError }}
+      value={{
+        user,
+        setUser,
+        loading,
+        isLogged,
+        logIn,
+        createAccount,
+        logOut,
+        lastError,
+      }}
     >
       {children}
     </AuthContext.Provider>

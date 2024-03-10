@@ -1,23 +1,16 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Post } from "../interfaces";
+import PostCard from "./PostCard";
 
-export default function PostsView({ posts }: { posts: Post[] }) {
-  console.log(posts);
+export default function PostsViewForYou({ posts }: { posts: Post[] }) {
   return (
     <SafeAreaView style={styles.postContainer}>
-      <Text>Posts</Text>
       <FlatList
         style={{ width: "100%", padding: 10 }}
         data={posts}
         keyExtractor={(item) => item.title}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
-            <Text>{item.description}</Text>
-            <Text>{item.username}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <PostCard post={item} />}
       />
     </SafeAreaView>
   );
