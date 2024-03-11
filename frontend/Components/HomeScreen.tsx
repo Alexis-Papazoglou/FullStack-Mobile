@@ -143,15 +143,15 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Welcome: {user.username}</Text>
+      <Text>Welcome {user.username}!</Text>
       <View style={styles.pageSelectorContainer}>
         <TouchableOpacity onPress={() => setPage(0)}>
-          <Text style={[styles.selectorText, page === 0 ? { color: "red" } : {}]}>
-            For you
+          <Text style={[styles.selectorText, page === 0 ? { color: "blue" } : {}]}>
+            Everything
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setPage(1)}>
-          <Text style={[styles.selectorText, page === 1 ? { color: "red" } : {}]}>
+          <Text style={[styles.selectorText, page === 1 ? { color: "blue" } : {}]}>
             Following
           </Text>
         </TouchableOpacity>
@@ -162,20 +162,25 @@ export default function HomeScreen() {
         <PostsViewFollowing posts={followingPosts} />
       )}
 
-      <TouchableOpacity
-        style={styles.postButton}
-        onPress={() => setPostModalVisible(true)}
-      >
-        <Text>Create Post</Text>
-      </TouchableOpacity>
-      <CreatePost
-        visible={isPostModalVisible}
-        onClose={() => setPostModalVisible(false)}
-        createPost={createPost}
-      />
-      <TouchableOpacity onPress={() => logOut(socketRef.current)}>
-        <Text>Log Out</Text>
-      </TouchableOpacity>
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={styles.postButton}
+          onPress={() => setPostModalVisible(true)}
+        >
+          <Text style={{ color: "white" }}>Create Post</Text>
+        </TouchableOpacity>
+        <CreatePost
+          visible={isPostModalVisible}
+          onClose={() => setPostModalVisible(false)}
+          createPost={createPost}
+        />
+        <TouchableOpacity
+          style={styles.logout}
+          onPress={() => logOut(socketRef.current)}
+        >
+          <Text>Log Out</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -189,17 +194,63 @@ const styles = StyleSheet.create({
     justifyContent: "center", // or "space-between"
   },
   postButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "blue",
     padding: 10,
     margin: 10,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
   },
   pageSelectorContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: "100%",
     padding: 10,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 5,
+    zIndex: 1,
   },
   selectorText: {
     fontSize: 20,
+  },
+  footer: {
+    width: "100%",
+    backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -8,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  logout: {
+    backgroundColor: "white",
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
   },
 });

@@ -15,20 +15,24 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <View style={styles.postContainer}>
-      <Text>{post.title}</Text>
-      <Text>{post.description}</Text>
-      <Text>{post.username}</Text>
+      <View>
+        <Text style={styles.title}>{post.title}</Text>
+        <Text style={styles.author}>Author: {post.username}</Text>
+        <Text>{post.description}</Text>
+      </View>
 
-      {!isFollowing && user.username !== post.username && (
-        <TouchableOpacity style={styles.postButton} onPress={followUser}>
-          <Text>Follow User</Text>
-        </TouchableOpacity>
-      )}
-      {isFollowing && user.username !== post.username && (
-        <TouchableOpacity onPress={unfollowUser} style={styles.postButton}>
-          <Text>Unfollow</Text>
-        </TouchableOpacity>
-      )}
+      <View style={styles.buttons}>
+        {!isFollowing && user.username !== post.username && (
+          <TouchableOpacity style={styles.postButton} onPress={followUser}>
+            <Text>Follow User</Text>
+          </TouchableOpacity>
+        )}
+        {isFollowing && user.username !== post.username && (
+          <TouchableOpacity onPress={unfollowUser} style={styles.postButton}>
+            <Text>Unfollow</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }
@@ -37,7 +41,6 @@ const styles = StyleSheet.create({
   postContainer: {
     width: "100%",
     flex: 1,
-    justifyContent: "center",
     backgroundColor: "white",
     padding: 10,
     marginVertical: 10,
@@ -47,10 +50,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   postButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "white",
     padding: 10,
     margin: 10,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+    paddingBottom: 5,
+  },
+  author: {
+    color: "gray",
+    paddingBottom: 5,
+  },
+  buttons: {
+    justifyContent: "center",
   },
 });

@@ -7,6 +7,7 @@ export default function PostsViewForYou({ posts }: { posts: Post[] }) {
   return (
     <SafeAreaView style={styles.postContainer}>
       <FlatList
+        contentContainerStyle={{ paddingBottom: 50 }}
         style={{ width: "100%", padding: 10 }}
         data={posts}
         keyExtractor={(item) => item.title}
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
+    paddingBottom: 50,
   },
 });

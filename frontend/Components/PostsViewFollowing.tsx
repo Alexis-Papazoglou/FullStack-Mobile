@@ -7,7 +7,8 @@ export default function PostsViewFollowing({ posts }: { posts: Post[] }) {
   return (
     <View style={styles.postContainer}>
       <FlatList
-        style={{ width: "100%", padding: 10 }}
+        contentContainerStyle={{ paddingBottom: 50 }}
+        style={{ width: "100%", padding: 10, paddingBottom: 50 }}
         data={posts}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => <PostCard post={item} />}
@@ -22,6 +23,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "lightgray",
+    backgroundColor: "white",
   },
 });

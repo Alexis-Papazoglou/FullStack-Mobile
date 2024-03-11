@@ -26,13 +26,13 @@ export default function AuthScreen() {
         onPress={() => logIn(username, password)}
         style={styles.button}
       >
-        <Text>Log In</Text>
+        <Text style={styles.textStyle}>Log In</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => createAccount(username, password)}
         style={styles.button}
       >
-        <Text>Create Account</Text>
+        <Text style={styles.textStyle}>Create Account</Text>
       </TouchableOpacity>
     </View>
   );
@@ -60,7 +60,10 @@ const styles = StyleSheet.create({
     height: 30,
     padding: 5,
     margin: 10,
-    backgroundColor: "lightgray",
+    backgroundColor: "blue",
     borderRadius: 10,
+  },
+  textStyle: {
+    color: "white",
   },
 });
