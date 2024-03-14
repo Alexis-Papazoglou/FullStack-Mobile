@@ -1,6 +1,29 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 
+//TODO ROUTE TO GET SPECIFIC POST THAT IS TRIGGERED FROM FRONTEND WHEN A COMMENT OR A LIKE IS MADE
+
+const getPostById = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const post = await Post.findOne({ id: postId });
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+    res.status(200).json({
+      message: "Post retrieved successfully",
+      post: post,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: err.message,
+    });
+  }
+};
+
 const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find();
@@ -35,4 +58,4 @@ const getFollowingPosts = async (req, res) => {
   }
 };
 
-module.exports = { getPosts, getFollowingPosts };
+module.exports = { getPostById, getPosts, getFollowingPosts };

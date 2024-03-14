@@ -1,7 +1,9 @@
 import { SafeAreaView, Text } from "react-native";
-import AuthScreen from "./Components/AuthScreen";
+import AuthScreen from "./AuthScreen";
 import { AuthProvider, useAuth } from "./Context/AuthContext";
-import HomeScreen from "./Components/HomeScreen";
+import { PostsProvider } from "./Context/PostsContext"; // import PostsProvider
+
+import ApplicationContainer from "./ApplicationContainer";
 
 function MainApp() {
   const { user, isLogged, loading } = useAuth();
@@ -19,11 +21,15 @@ function MainApp() {
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    >
-      {isLogged && user ? <HomeScreen /> : <AuthScreen />}
-    </SafeAreaView>
+    <>
+      {isLogged && user ? (
+        <PostsProvider>
+          <ApplicationContainer />
+        </PostsProvider>
+      ) : (
+        <AuthScreen />
+      )}
+    </>
   );
 }
 

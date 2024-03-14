@@ -1,10 +1,10 @@
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "./Context/AuthContext";
 
 export default function AuthScreen() {
   const { logIn, createAccount, lastError } = useAuth();
-  const [username, setUsername] = useState<string>("test");
+  const [username, setUsername] = useState<string>("Alex");
   const [password, setPassword] = useState<string>("test");
 
   return (
@@ -21,6 +21,7 @@ export default function AuthScreen() {
         style={styles.input}
         placeholder="Password.."
         onChangeText={setPassword}
+        secureTextEntry={true}
       />
       <TouchableOpacity
         onPress={() => logIn(username, password)}

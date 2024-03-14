@@ -1,27 +1,11 @@
 import React from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  SafeAreaView,
-} from "react-native";
+import { Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
+import { usePostsActions } from "../Context/PostsContext";
 
-interface CreatePostProps {
-  visible: boolean;
-  onClose: () => void;
-  createPost: (title: string, description: string) => void;
-}
-
-export const CreatePost: React.FC<CreatePostProps> = ({
-  visible,
-  onClose,
-  createPost,
-}) => {
+export const CreatePost = () => {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const { createPost } = usePostsActions();
 
   const handleSubmit = () => {
     createPost(title, description);
@@ -30,20 +14,17 @@ export const CreatePost: React.FC<CreatePostProps> = ({
   };
 
   return (
-    <Modal visible={visible} onRequestClose={onClose} animationType="slide">
-      <SafeAreaView style={styles.container}>
-        <Text>Title</Text>
-        <TextInput style={styles.input} value={title} onChangeText={setTitle} />
-        <Text>Description</Text>
-        <TextInput
-          style={styles.input}
-          value={description}
-          onChangeText={setDescription}
-        />
-        <Button title="Submit" onPress={handleSubmit} />
-        <Button title="Close" onPress={onClose} />
-      </SafeAreaView>
-    </Modal>
+    <SafeAreaView style={styles.container}>
+      <Text>Title</Text>
+      <TextInput style={styles.input} value={title} onChangeText={setTitle} />
+      <Text>Description</Text>
+      <TextInput
+        style={styles.input}
+        value={description}
+        onChangeText={setDescription}
+      />
+      <Button title="Submit" onPress={handleSubmit} />
+    </SafeAreaView>
   );
 };
 

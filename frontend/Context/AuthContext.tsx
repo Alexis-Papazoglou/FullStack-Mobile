@@ -3,6 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { Socket } from "socket.io-client";
 import { User, Token } from "../interfaces";
+import { SERVER } from "../config";
 
 interface AuthProps {
   isLogged: boolean;
@@ -15,7 +16,6 @@ interface AuthProps {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
-const SERVER = "http://192.168.1.19:3000";
 const AuthContext = createContext<AuthProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {

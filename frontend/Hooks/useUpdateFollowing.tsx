@@ -2,6 +2,7 @@ import { useAuth } from "../Context/AuthContext";
 import { Post, User } from "../interfaces";
 import { useCheckToken } from "./useCheckToken";
 import * as SecureStore from "expo-secure-store";
+import { SERVER } from "../config";
 
 export function useUpdateFollowing(user: User, post: Post) {
   const isTokenOk = useCheckToken();
@@ -14,7 +15,7 @@ export function useUpdateFollowing(user: User, post: Post) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.19:3000/users/followUser/${user.username}/${post.username}`,
+        `${SERVER}/users/followUser/${user.username}/${post.username}`,
         {
           method: "POST",
           headers: {
@@ -44,7 +45,7 @@ export function useUpdateFollowing(user: User, post: Post) {
 
     try {
       const response = await fetch(
-        `http://192.168.1.19:3000/users/unfollowUser/${user.username}/${post.username}`,
+        `${SERVER}/users/unfollowUser/${user.username}/${post.username}`,
         {
           method: "POST",
           headers: {

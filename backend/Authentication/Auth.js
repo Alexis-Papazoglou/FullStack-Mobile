@@ -2,7 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const TOKEN_EXPIRATION_SECONDS = 360;
+const TOKEN_EXPIRATION_SECONDS = 720;
 
 const register = async (req, res, next) => {
   if (req.body.username !== undefined && req.body.password !== undefined) {

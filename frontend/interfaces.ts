@@ -9,8 +9,19 @@ export interface Token {
   expiration: string;
 }
 
+export interface Comment {
+  id: string;
+  username: string;
+  text: string;
+  timestamp: string;
+}
+
 export interface Post {
+  id: string;
   title: string;
   description: string;
   username: string;
+  timestamp: string;
+  likes: string[];
+  comments: Comment[];
 }
