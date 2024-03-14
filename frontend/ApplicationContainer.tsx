@@ -1,5 +1,6 @@
 // ApplicationContainer.tsx
 import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
 import { useAuth } from "./Context/AuthContext";
 import io, { Socket } from "socket.io-client";
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,6 +11,7 @@ import PostsViewFollowing from "./BottomTabScreens/PostsViewFollowing";
 import Profile from "./BottomTabScreens/Profile";
 import { usePostsActions } from "./Context/PostsContext";
 import { CreatePost } from "./Components/CreatePost";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,18 +58,64 @@ export default function ApplicationContainer() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Feed">
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      >
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="home" color={color} size={size} />
+            ),
+          }}
+          name="Feed"
+        >
           {(props) => socket && <PostsViewForYou />}
         </Tab.Screen>
-        <Tab.Screen name="Following">
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="feed" color={color} size={size} />
+            ),
+          }}
+          name="Following"
+        >
           {(props) => socket && <PostsViewFollowing />}
         </Tab.Screen>
-        <Tab.Screen name="Create">{(props) => socket && <CreatePost />}</Tab.Screen>
-        <Tab.Screen name="Profile">
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="add-circle" color={color} size={size} />
+            ),
+          }}
+          name="Create"
+        >
+          {(props) => socket && <CreatePost />}
+        </Tab.Screen>
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="user" color={color} size={size} />
+            ),
+          }}
+          name="Profile"
+        >
           {(props) => socket && <Profile socket={socket} />}
         </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: "#fff",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+});

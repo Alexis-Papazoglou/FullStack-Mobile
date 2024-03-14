@@ -12,7 +12,7 @@ export interface Token {
 export interface Comment {
   id: string;
   username: string;
-  text: string;
+  comment: string;
   timestamp: string;
 }
 

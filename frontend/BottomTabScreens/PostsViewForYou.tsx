@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import PostCard from "../Components/PostCard";
 import { usePostsActions } from "../Context/PostsContext";
@@ -13,7 +13,7 @@ export default function PostsViewForYou() {
   }, [user]); // user in the dependency because when i follow and unfollow the user changes and i need to refetch the posts
 
   return (
-    <View style={styles.postContainer}>
+    <SafeAreaView style={styles.postContainer}>
       <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
         style={{ width: "100%", padding: 10, paddingBottom: 50 }}
@@ -21,7 +21,7 @@ export default function PostsViewForYou() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PostCard post={item} />}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
