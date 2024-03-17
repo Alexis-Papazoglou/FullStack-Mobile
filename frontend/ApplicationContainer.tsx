@@ -62,6 +62,7 @@ export default function ApplicationContainer() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: styles.tabBar,
+          tabBarActiveTintColor: "blue",
         }}
       >
         <Tab.Screen

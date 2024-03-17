@@ -22,6 +22,10 @@ export interface Post {
   description: string;
   username: string;
   timestamp: string;
-  likes: string[];
+  likes: LikesObject[];
   comments: Comment[];
+}
+
+export interface LikesObject {
+  username: string;
 }

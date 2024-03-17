@@ -59,7 +59,15 @@ export default function PostCard({ post }: { post: Post }) {
               style={styles.likesAndCommentsBtn}
               onPress={() => likePost(post.id)}
             >
-              <Ionicons name="heart" size={24} color="black" />
+              <Ionicons
+                name="heart"
+                size={24}
+                color={
+                  post.likes.some((like) => like.username === user.username)
+                    ? "red"
+                    : "black"
+                }
+              />
             </TouchableOpacity>
             <Text>{post.likes.length}</Text>
             <TouchableOpacity

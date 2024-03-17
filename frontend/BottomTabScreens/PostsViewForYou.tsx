@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import PostCard from "../Components/PostCard";
 import { usePostsActions } from "../Context/PostsContext";
 import { useAuth } from "../Context/AuthContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function PostsViewForYou() {
   const { posts, getPosts } = usePostsActions();
@@ -14,13 +15,15 @@ export default function PostsViewForYou() {
 
   return (
     <SafeAreaView style={styles.postContainer}>
-      <FlatList
-        contentContainerStyle={{ paddingBottom: 50 }}
-        style={{ width: "100%", padding: 10, paddingBottom: 50 }}
-        data={posts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PostCard post={item} />}
-      />
+      <KeyboardAwareScrollView extraScrollHeight={50}>
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 50 }}
+          style={{ width: "100%", padding: 10, paddingBottom: 50 }}
+          data={posts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <PostCard post={item} />}
+        />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
